@@ -112,13 +112,20 @@ namespace ClassLab3610794BranchingWillow.RealEstate_Folder
 
       public decimal Value { get; set; }
 
-      static void AddRealEstate()
+      // needs to take a real estate to add. This guy CANNOT be static as its accessing 
+      // instance member _realEstateList
+      public void AddRealEstate(RealEstate newRealestate)
       {
-         //RealEstate.Add(_realEstateList);
+         _realEstateList.Add(newRealestate);
       }
-      public static void ListRealEstate()
+      // This guy needs to return the list - more accurately an immutable copy of it 
+      // caller can do list.Add(garbagio) and it wont impact the actual meaningful list
+      // stored here in _realEstateList. This is like a half baked repository pattern 
+      // dotnet thing -  better to return IEnum instead of the more specific type IList 
+      // general rule is less specific type you return, more flexibility to caller which is good 
+      public  IEnumerable<RealEstate> ListRealEstate()
       {
-         //List<RealEstate> _realEstateList;
+        return _realEstateList; 
       }
 
       public void TotalValueOfAllRealEstate()

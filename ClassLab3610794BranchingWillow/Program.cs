@@ -11,11 +11,14 @@ namespace ClassLab3610794BranchingWillow
       static bool keepGoing = true;
       static string zoningSelect;
       static bool zoningIsEnteredProperly = false;
-      static void Main(string[] args)
+
+      static Inventory inventory; 
+
+      public static void Main(string[] args)
       {
          //RealEstate realEstate;
-
-         Inventory inventory = new Inventory();
+         // this maybe better off as a Class variable rather than an instance variable in Main but w/e
+         inventory = new Inventory();
          RealEstate realEstate;
 
          while (keepGoing)
@@ -25,7 +28,7 @@ namespace ClassLab3610794BranchingWillow
             keepGoing = ObtainMenuSelection(menuSelect);
             Console.Clear();
          }
-
+      }
          static string menuDisplay()
          {
             Console.WriteLine("Inventory Menu");
@@ -40,14 +43,14 @@ namespace ClassLab3610794BranchingWillow
 
             return menuSelect = Console.ReadLine();
          }
-         static bool ObtainMenuSelection(string menuSelect)
+         private static bool ObtainMenuSelection(string menuSelect)
          {
             switch (menuSelect)
             {
                case "1":
                {
                      Console.Clear();
-                     AddInventoryItem();
+                     AddInventoryItem(inventory);
                      break;
 
                   }
@@ -71,12 +74,12 @@ namespace ClassLab3610794BranchingWillow
             }
             return keepGoing;
          }
-      }
-      private static void AddInventoryItem()
-      {
-         var inventory = new RealEstate();
+      
+      private static void AddInventoryItem(Inventory inventory)
+      {  // I tweaked naming here because I think that was tripping you up 
+         var newRealEstate = new RealEstate();
          Console.Write("Enter Address: ");
-         inventory.Address = Console.ReadLine();
+         newRealEstate.Address = Console.ReadLine();
          try
          {
             bool ObtainedGoodSquareFootage = false;
@@ -89,7 +92,7 @@ namespace ClassLab3610794BranchingWillow
                squareFootageIsNumeic = int.TryParse(Console.ReadLine(), out tempSquareFootage);
                if (squareFootageIsNumeic)
                {
-                  inventory.SquareFootage = tempSquareFootage;
+                  newRealEstate.SquareFootage = tempSquareFootage;
                   ObtainedGoodSquareFootage = true;
                }
                else
@@ -109,7 +112,7 @@ namespace ClassLab3610794BranchingWillow
                askingPriceIsNumeic = decimal.TryParse(Console.ReadLine(), out tempAskingPrice);
                if (askingPriceIsNumeic)
                {
-                  inventory.AskingPrice = tempAskingPrice;
+                  newRealEstate.AskingPrice = tempAskingPrice;
                   ObtainedGoodAskingPrice = true;
                }
                else
@@ -131,13 +134,13 @@ namespace ClassLab3610794BranchingWillow
             {
                case "1":
                   {
-                     inventory.Zoning = zoningSelect;
+                     newRealEstate.Zoning = zoningSelect;
                      zoningIsEnteredProperly = true;
                      break;
                   }
                case "2":
                   {
-                     inventory.Zoning = zoningSelect;
+                     newRealEstate.Zoning = zoningSelect;
                      zoningIsEnteredProperly = true;
                      break;
                   }
@@ -150,9 +153,10 @@ namespace ClassLab3610794BranchingWillow
                   }
             }
          } while (!zoningIsEnteredProperly);
-
-         inventory.RealEstate.Add(inventory);
-
+         // so yeah this doesnt work because Inventory.cs doesnt have a public property called "RealEstate". 
+         // You gave yourself a naming issue here, inventory was an instance of real estate, not the global Inventory (which is like a pho repository)
+        // inventory.RealEstate.Add(inventory);
+         inventory.AddRealEstate(newRealEstate);
          Console.WriteLine();
          Console.WriteLine($"Record Added... Add more data here...");
          Console.ReadLine();
@@ -160,7 +164,7 @@ namespace ClassLab3610794BranchingWillow
       }
       private static void ListInventoryItems()
       {
-         List<RealEstate> _realEstateList = Inventory.ListRealEstate();
+         IEnumerable<RealEstate> _realEstateList = inventory.ListRealEstate();
          
          foreach (var data in _realEstateList)
          {
@@ -170,7 +174,7 @@ namespace ClassLab3610794BranchingWillow
       private static void DeleteInventoryItem()
       {
          Console.Write("Enter Address of Entry to Delete: ");
-         inventory.address = Console.ReadLine();
+         // inventory.address = Console.ReadLine();
 
          Console.Clear();
 

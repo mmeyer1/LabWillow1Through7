@@ -12,6 +12,13 @@ namespace ClassLab3610794BranchingWillow.RealEstate_Folder
       public string NameOfProperty = "Test Name";
       public string DescriptionOfProperty = "Test Description";
       public string Address { get; set; }
+      // This is a constructor. A constructor is a special type of method on an objet that is invoked when yuo 
+      // new up an instance of that object. IN this case, this guy will be called whenever you do new RealEstate. 
+      // you can give this guy params which is really useful, you know stuff about the real estate when you create it
+      // Also gives you a shorthand for "this info is required to create a real estate and eff off if you dont have it yet" 
+      public RealEstate() {
+
+      }
       
       private int _squareFootage;
       public int SquareFootage
