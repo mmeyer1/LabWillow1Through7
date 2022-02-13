@@ -19,7 +19,6 @@ namespace ClassLab3610794BranchingWillow
          //RealEstate realEstate;
          // this maybe better off as a Class variable rather than an instance variable in Main but w/e
          inventory = new Inventory();
-         RealEstate realEstate;
 
          while (keepGoing)
          {

@@ -18,20 +18,25 @@ namespace ClassLab3610794BranchingWillow.RealEstate_Folder
       // Also gives you a shorthand for "this info is required to create a real estate and eff off if you dont have it yet"
       // I'm only converting one of these properties to a "give me that at construction time" property - you can reverse engineer the rest
       // I think 
-      public RealEstate(int squareFootage) {
+      public RealEstate(string squareFootage) {
          SquareFootage = squareFootage;
       }
       
       private int _squareFootage;
-      public int SquareFootage
+      public string SquareFootage
       {
-         get { return _squareFootage; }
+         get { return _squareFootage.ToString(); }
          set
          {
-            if (value < 100)
+            if (int.TryParse(value, out int intValue)) {
+            if (intValue < 100)
                throw new ArgumentOutOfRangeException($"Sqr Footage of {NameOfProperty} {DescriptionOfProperty} must be greater than 99");
 
-            _squareFootage = value;
+            _squareFootage = intValue;
+            } else {
+               throw new InvalidOperationException("Cannot parse value! Must be int");
+            }
+
 
          }
       }

@@ -5,7 +5,12 @@ namespace ClassLab3610794BranchingWillow.RealEstate_Folder {
     // House also gains access to anything that isnt Private in Realestate
     // so for example an instance of house has a property house.Address even without me declaring it here because
     // its exposed on the parent
-    public class House : RealEstate {
-
+    public class House : RealEstate
+    {
+        // this is "constructor chaining". The parent class needs 
+        // a param in its constructor. Constructors chain - so child constructors call parent constructors
+        public House(string squareFootage) : base(squareFootage)
+        {
+        }
     }
 }
