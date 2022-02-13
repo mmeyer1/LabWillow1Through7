@@ -128,6 +128,20 @@ namespace ClassLab3610794BranchingWillow.RealEstate_Folder
         return _realEstateList; 
       }
 
+      // Depending on your paranoia you may try catch this whole sucker and eat all exceptions - if this was a repository class
+      // interacting with a DB or something you may do that, overkill here 
+      public bool DeleteByAddress(string address) {
+         var targetRealEstate =_realEstateList.FirstOrDefault(rel => string.Equals(rel.Address,address, StringComparison.CurrentCultureIgnoreCase));
+         if (targetRealEstate != null) {
+            // he's dead jim, its gone from the Source of Truth forever now
+            _realEstateList.Remove(targetRealEstate);
+            return true;
+         } else {
+            // Couldn't find it
+            return false;
+         }
+      }
+
       public void TotalValueOfAllRealEstate()
       {
          foreach (var property in _realEstateList)

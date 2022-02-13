@@ -23,7 +23,6 @@ namespace ClassLab3610794BranchingWillow
 
          while (keepGoing)
          {
-            realEstate = new RealEstate();
             string menuSelect = menuDisplay();
             keepGoing = ObtainMenuSelection(menuSelect);
             Console.Clear();
@@ -77,30 +76,16 @@ namespace ClassLab3610794BranchingWillow
       
       private static void AddInventoryItem(Inventory inventory)
       {  // I tweaked naming here because I think that was tripping you up 
-         var newRealEstate = new RealEstate();
+
          Console.Write("Enter Address: ");
-         newRealEstate.Address = Console.ReadLine();
+         var address = Console.ReadLine();
+         // remove all this - refactor to the properties in the RealEstate class. 
+         // instructions say just to throw helpless user back to main menu if they 
+         // make a mistake - so "do worse" here :P I commented out all the stuff that won't compile
+         // now with my changes but this is all destined for oblivion anyway
          try
          {
-            bool ObtainedGoodSquareFootage = false;
-            do
-            {
-               Console.Write("Enter Square Footage: ");
-               //inventory.SquareFootage = Convert.ToInt32(Console.ReadLine());
-               int tempSquareFootage;
-               bool squareFootageIsNumeic;
-               squareFootageIsNumeic = int.TryParse(Console.ReadLine(), out tempSquareFootage);
-               if (squareFootageIsNumeic)
-               {
-                  newRealEstate.SquareFootage = tempSquareFootage;
-                  ObtainedGoodSquareFootage = true;
-               }
-               else
-               {
-                  Console.Write($"Square Footage needs to be a numeric whole number...");
-                  Console.ReadLine();
-               }
-            } while (ObtainedGoodSquareFootage == false);
+          
 
             bool ObtainedGoodAskingPrice = false;
             do
@@ -112,7 +97,7 @@ namespace ClassLab3610794BranchingWillow
                askingPriceIsNumeic = decimal.TryParse(Console.ReadLine(), out tempAskingPrice);
                if (askingPriceIsNumeic)
                {
-                  newRealEstate.AskingPrice = tempAskingPrice;
+                  // newRealEstate.AskingPrice = tempAskingPrice;
                   ObtainedGoodAskingPrice = true;
                }
                else
@@ -134,13 +119,13 @@ namespace ClassLab3610794BranchingWillow
             {
                case "1":
                   {
-                     newRealEstate.Zoning = zoningSelect;
+                     // newRealEstate.Zoning = zoningSelect;
                      zoningIsEnteredProperly = true;
                      break;
                   }
                case "2":
                   {
-                     newRealEstate.Zoning = zoningSelect;
+                     // newRealEstate.Zoning = zoningSelect;
                      zoningIsEnteredProperly = true;
                      break;
                   }
@@ -156,14 +141,23 @@ namespace ClassLab3610794BranchingWillow
          // so yeah this doesnt work because Inventory.cs doesnt have a public property called "RealEstate". 
          // You gave yourself a naming issue here, inventory was an instance of real estate, not the global Inventory (which is like a pho repository)
         // inventory.RealEstate.Add(inventory);
+        Console.WriteLine("Enter a square footage");
+        var tempSquareFootage = Console.ReadLine();
+        try {
+         var newRealEstate = new RealEstate(tempSquareFootage);
          inventory.AddRealEstate(newRealEstate);
          Console.WriteLine();
          Console.WriteLine($"Record Added... Add more data here...");
          Console.ReadLine();
+        } catch (Exception e) {
+           Console.WriteLine("Could not create new real estate because " + e.Message);
+           menuDisplay();
+        }
 
       }
       private static void ListInventoryItems()
       {
+         // minor tweak to be more flexible 
          IEnumerable<RealEstate> _realEstateList = inventory.ListRealEstate();
          
          foreach (var data in _realEstateList)
@@ -174,8 +168,9 @@ namespace ClassLab3610794BranchingWillow
       private static void DeleteInventoryItem()
       {
          Console.Write("Enter Address of Entry to Delete: ");
-         // inventory.address = Console.ReadLine();
-
+         var result = inventory.DeleteByAddress(Console.ReadLine());
+         // IDK WTF the expected should be here because I'm lazy - but output if it worked or not
+         Console.WriteLine("RealEstate " + (result ? " was " : " was not ") + " deleted");
          Console.Clear();
 
       }
